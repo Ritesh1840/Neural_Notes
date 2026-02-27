@@ -9,6 +9,8 @@
         body { background:linear-gradient(135deg,#0f2027,#203a43,#2c5364); color:#fff; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:20px; overflow-x:hidden; }
         .container { background:rgba(255,255,255,0.05); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.1); padding:25px 20px; border-radius:20px; width:100%; max-width:450px; box-shadow:0 15px 35px rgba(0,0,0,0.5); text-align:center; }
         h1 { font-size:26px; margin-bottom:20px; background:linear-gradient(90deg,#00ffcc,#00ffaa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:1px; }
+        
+        /* Search */
         .search-box { display:flex; gap:8px; margin-bottom:20px; }
         #search-input { flex:1; padding:12px 15px; border:none; outline:none; border-radius:10px; background:rgba(0,0,0,0.3); color:white; font-size:14px; transition:0.3s; border:1px solid transparent; }
         #search-input:focus { border:1px solid #00ffcc; background:rgba(0,0,0,0.5); }
@@ -18,31 +20,30 @@
         .mic-btn:hover { background:rgba(0,255,204,0.2); border-color:#00ffcc; }
         .recording { animation:pulse 1.5s infinite; background:rgba(255,76,76,0.5)!important; border-color:#ff4c4c!important; }
         @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(255,76,76,0.7)} 70%{box-shadow:0 0 0 10px rgba(255,76,76,0)} 100%{box-shadow:0 0 0 0 rgba(255,76,76,0)} }
+        
+        /* Mode Switch */
         .mode-switch { margin-bottom:15px; }
         #modeBtn { background:transparent; border:1px solid #00ffcc; color:#00ffcc; padding:8px 15px; border-radius:20px; cursor:pointer; font-size:12px; text-transform:uppercase; letter-spacing:1px; transition:0.3s; }
         #modeBtn:hover { background:rgba(0,255,204,0.2); }
+        
+        /* Media Container */
         .media-container { margin-bottom:20px; display:flex; justify-content:center; align-items:center; min-height:180px; position:relative; }
-
-        /* Album art always visible as background layer */
-        .album-art-wrapper { width:160px; height:160px; border-radius:50%; padding:5px; background:linear-gradient(45deg,#00ffcc,#2c5364); box-shadow:0 0 20px rgba(0,255,204,0.3); display:flex; flex-shrink:0; }
+        .album-art-wrapper { width:160px; height:160px; border-radius:50%; padding:5px; background:linear-gradient(45deg,#00ffcc,#2c5364); box-shadow:0 0 20px rgba(0,255,204,0.3); display:flex; }
         #album-art { width:100%; height:100%; border-radius:50%; object-fit:cover; border:3px solid #121212; animation:spin 10s linear infinite; animation-play-state:paused; }
         @keyframes spin { 100%{transform:rotate(360deg)} }
-
-        /* Video container overlays on top in video mode */
-        #video-container {
-            position:absolute;
-            top:0; left:0; right:0; bottom:0;
-            width:100%;
-            border-radius:12px;
-            overflow:hidden;
-            display:none;
-            box-shadow:0 0 20px rgba(0,0,0,0.6);
-            background:#000;
-            z-index:10;
+        
+        /* Video Container Fixes */
+        #video-container { 
+            width:100%; aspect-ratio:16/9; border-radius:12px; overflow:hidden; 
+            box-shadow:0 0 20px rgba(0,0,0,0.6); background:#000;
+            position:absolute; visibility:hidden; opacity:0; pointer-events:none; 
+            transition:opacity 0.3s ease; 
         }
-        #video-container iframe,
-        #yt-player { width:100% !important; height:100% !important; border:none; }
+        #video-container.video-active {
+            position:relative; visibility:visible; opacity:1; pointer-events:auto;
+        }
 
+        /* Controls & Now Playing */
         .now-playing-box { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; padding:0 10px; }
         .now-playing { font-size:16px; font-weight:600; color:#e0e0e0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:80%; }
         #favBtn { background:none; border:none; font-size:22px; cursor:pointer; transition:transform 0.2s; }
@@ -51,9 +52,13 @@
         .controls button { background:rgba(255,255,255,0.1); border:none; color:white; font-size:20px; width:50px; height:50px; border-radius:50%; cursor:pointer; transition:0.3s; display:flex; justify-content:center; align-items:center; }
         .controls button:hover { background:rgba(0,255,204,0.2); box-shadow:0 0 15px rgba(0,255,204,0.4); }
         #playPauseBtn { width:65px; height:65px; font-size:24px; background:linear-gradient(45deg,#00ffcc,#00ffaa); color:#121212; }
+        
+        /* Progress Bar */
         .progress-container { display:flex; align-items:center; gap:10px; margin-bottom:20px; font-size:12px; color:#aaa; }
         .progress-bar-wrapper { flex:1; height:8px; background:rgba(255,255,255,0.1); border-radius:5px; cursor:pointer; position:relative; overflow:hidden; }
         .progress-fill { height:100%; width:0%; background:#00ffcc; border-radius:5px; transition:width 0.1s linear; }
+        
+        /* Lists */
         .section-header { text-align:left; font-size:13px; color:#00ffcc; margin:20px 0 10px; text-transform:uppercase; letter-spacing:1px; border-bottom:1px solid rgba(0,255,204,0.2); padding-bottom:5px; }
         .list-container { max-height:140px; overflow-y:auto; border-radius:10px; -webkit-overflow-scrolling:touch; }
         .list-container::-webkit-scrollbar { width:6px; }
@@ -81,11 +86,10 @@
         <button id="modeBtn" onclick="toggleMode()">🎬 Switch to Video</button>
     </div>
 
-    <div class="media-container" id="media-container">
+    <div class="media-container">
         <div class="album-art-wrapper" id="art-wrapper">
             <img id="album-art" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop" alt="Album Art">
         </div>
-        <!-- Video container sits on top as an overlay when active -->
         <div id="video-container">
             <div id="yt-player"></div>
         </div>
@@ -122,12 +126,14 @@
     <div id="search-history" class="list-container"></div>
 </div>
 
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
     const API_KEY = 'AIzaSyAhO7y4jNGufzxdeK4lpap-Oolr1aS_DJo';
     let player = null;
     let isPlayerReady = false;
-    let pendingPlay = null;
-    let pendingAutoLoad = null;
+
+    let pendingPlay = null;   
+    let pendingAutoLoad = null; 
 
     let searchResults = JSON.parse(localStorage.getItem('neonSearchResults')) || [];
     let playedSongs   = JSON.parse(localStorage.getItem('neonHistory'))       || [];
@@ -149,36 +155,13 @@
             checkFavoriteStatus();
             pendingAutoLoad = currentTrack;
         }
-
-        // Load YouTube IFrame API with nocookie host to suppress ads
-        loadYTScript();
     };
-
-    // ─── Load YT API using nocookie domain ───────────────────────────────────────
-    function loadYTScript() {
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        document.head.appendChild(tag);
-    }
-
-    // ─── YOUTUBE API ─────────────────────────────────────────────────────────────
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('yt-player', {
             height: '100%',
             width:  '100%',
-            // host: nocookie suppresses ads for most users
-            host: 'https://www.youtube-nocookie.com',
-            playerVars: {
-                controls:       0,
-                disablekb:      1,
-                fs:             0,
-                rel:            0,
-                playsinline:    1,
-                iv_load_policy: 3,   // hide annotations
-                modestbranding: 1,   // minimal YT branding
-                origin:         window.location.origin || 'https://localhost'
-            },
+            playerVars: { controls: 0, disablekb: 1, fs: 0, rel: 0, playsinline: 1 },
             events: {
                 onReady:       onPlayerReady,
                 onStateChange: onPlayerStateChange,
@@ -232,8 +215,6 @@
         }
     }
 
-    // ─── CORE PLAY LOGIC ─────────────────────────────────────────────────────────
-
     function playMusic(videoId, title, thumbnail) {
         if (!isPlayerReady || !player) {
             pendingPlay = { videoId, title, thumbnail };
@@ -248,16 +229,12 @@
 
     function _loadAndPlay(videoId, title, thumbnail) {
         currentTrack = { videoId, title, thumbnail };
-
-        // loadVideoById always restarts and plays — works in both audio & video mode
-        player.loadVideoById(videoId);
-
+        player.loadVideoById(videoId);   
         updateUI(title, thumbnail);
         checkFavoriteStatus();
         setStatus('');
 
-        // History dedup
-        if (!playedSongs.length || playedSongs[playedSongs.length - 1].videoId !== videoId) {
+        if (playedSongs.length === 0 || playedSongs[playedSongs.length - 1].videoId !== videoId) {
             playedSongs.push(currentTrack);
             if (playedSongs.length > 20) playedSongs.shift();
             localStorage.setItem('neonHistory', JSON.stringify(playedSongs));
@@ -268,8 +245,6 @@
         updateHistoryUI();
         setupMediaSession(title, thumbnail);
     }
-
-    // ─── PLAY / PAUSE ────────────────────────────────────────────────────────────
 
     function togglePlayPause() {
         if (!isPlayerReady || !player) return;
@@ -297,8 +272,6 @@
         }
     }
 
-    // ─── PREV / NEXT ─────────────────────────────────────────────────────────────
-
     function nextTrack() {
         if (historyIndex < playedSongs.length - 1) {
             historyIndex++;
@@ -314,44 +287,6 @@
             playMusic(s.videoId, s.title, s.thumbnail);
         }
     }
-
-    // ─── MODE SWITCH ─────────────────────────────────────────────────────────────
-    /**
-     * FIX: Instead of hiding/showing the player iframe (which destroys its state),
-     * we keep the iframe alive at all times. In audio mode we just cover it with the
-     * album art. When switching to video we reveal the iframe and seek to the current
-     * playback position so the video is in sync.
-     */
-    function toggleMode() {
-        isVideoMode = !isVideoMode;
-
-        const videoContainer = document.getElementById('video-container');
-        const artWrapper     = document.getElementById('art-wrapper');
-        const modeBtn        = document.getElementById('modeBtn');
-
-        if (isVideoMode) {
-            modeBtn.innerText = '🎧 Switch to Audio';
-            videoContainer.style.display = 'block';
-            // Sync video to current audio position
-            if (isPlayerReady && player && player.getCurrentTime) {
-                const currentTime = player.getCurrentTime();
-                const state = player.getPlayerState();
-                if (currentTrack) {
-                    if (state === YT.PlayerState.PLAYING) {
-                        // Already playing — seekTo syncs the visible video
-                        player.seekTo(currentTime, true);
-                    } else if (state === YT.PlayerState.PAUSED) {
-                        player.seekTo(currentTime, true);
-                    }
-                }
-            }
-        } else {
-            modeBtn.innerText = '🎬 Switch to Video';
-            videoContainer.style.display = 'none';
-        }
-    }
-
-    // ─── SEARCH ──────────────────────────────────────────────────────────────────
 
     function handleKeyPress(e) { if (e.key === 'Enter') searchMusic(); }
 
@@ -379,8 +314,6 @@
             });
     }
 
-    // ─── VOICE SEARCH ────────────────────────────────────────────────────────────
-
     function startVoiceSearch() {
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SR) { alert('Voice search not supported in this browser.'); return; }
@@ -395,7 +328,18 @@
         rec.start();
     }
 
-    // ─── FAVORITES ───────────────────────────────────────────────────────────────
+    function toggleMode() {
+        isVideoMode = !isVideoMode;
+        document.getElementById('modeBtn').innerText = isVideoMode ? '🎧 Switch to Audio' : '🎬 Switch to Video';
+        document.getElementById('art-wrapper').style.display = isVideoMode ? 'none' : 'flex';
+        
+        const videoContainer = document.getElementById('video-container');
+        if (isVideoMode) {
+            videoContainer.classList.add('video-active');
+        } else {
+            videoContainer.classList.remove('video-active');
+        }
+    }
 
     function checkFavoriteStatus() {
         if (!currentTrack) return;
@@ -429,8 +373,6 @@
         });
     }
 
-    // ─── RESULTS ─────────────────────────────────────────────────────────────────
-
     function renderResultsUI() {
         const c = document.getElementById('music-results');
         c.innerHTML = '';
@@ -445,8 +387,6 @@
             c.appendChild(div);
         });
     }
-
-    // ─── HISTORY ─────────────────────────────────────────────────────────────────
 
     function updateHistoryUI() {
         const c = document.getElementById('search-history');
@@ -467,8 +407,6 @@
         });
     }
 
-    // ─── PROGRESS BAR ────────────────────────────────────────────────────────────
-
     function startProgressBar() {
         clearInterval(progressInterval);
         const fill = document.getElementById('progress-fill');
@@ -488,18 +426,14 @@
 
     function seekTrack(e) {
         if (!isPlayerReady || !player?.getDuration) return;
-        const rect = document.querySelector('.progress-bar-wrapper').getBoundingClientRect();
-        const ratio = (e.clientX - rect.left) / rect.width;
-        const seekTo = Math.max(0, Math.min(1, ratio)) * player.getDuration();
-        player.seekTo(seekTo, true);
+        const w = document.querySelector('.progress-bar-wrapper').clientWidth;
+        player.seekTo((e.offsetX / w) * player.getDuration());
     }
 
     function formatTime(s) {
         const m = Math.floor(s / 60), sec = Math.floor(s % 60);
         return `${m}:${sec < 10 ? '0' : ''}${sec}`;
     }
-
-    // ─── MEDIA SESSION ───────────────────────────────────────────────────────────
 
     function setupMediaSession(title, thumbnail) {
         if (!('mediaSession' in navigator)) return;
@@ -512,8 +446,6 @@
         navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
         navigator.mediaSession.setActionHandler('nexttrack',     nextTrack);
     }
-
-    // ─── UI HELPERS ──────────────────────────────────────────────────────────────
 
     function updateUI(title, thumbnail) {
         document.getElementById('now-playing-text').innerText = title;
@@ -546,3 +478,4 @@
 </script>
 </body>
 </html>
+
