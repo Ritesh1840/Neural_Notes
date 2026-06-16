@@ -44,7 +44,7 @@ Neural Notes is a responsive music streaming web application built using HTML, C
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/NeuralNotes.git
+git clone https://github.com/Ritesh1840/Neural_Notes.git
 ```
 
 Or download the ZIP file directly from the repository.
@@ -54,7 +54,7 @@ Or download the ZIP file directly from the repository.
 Simply open the following file in your web browser:
 
 ```
-NeuralNotes.html
+index.html
 ```
 
 > ✅ No installation or dependencies required.
@@ -143,7 +143,7 @@ Neural Notes is fully responsive and optimized for:
 
 **Rupam**
 
-- GitHub: [https://github.com/your-username](https://github.com/your-username)
+- GitHub: [https://github.com/Ritesh1840](https://github.com/Ritesh1840)
 
 ---
 
